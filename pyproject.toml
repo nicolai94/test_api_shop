@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "test-api-shop"
+version = "0.1.0"
+description = ""
+authors = ["n.pashkevich <pashkevich@starterapp.ru>"]
+readme = "README.md"
+packages = [{include = "test_api_shop"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0"
+djangorestframework = "^3.14.0"
+django-environ = "^0.11.2"
+drf-spectacular = "^0.27.0"
+django-cors-headers = "^4.3.1"
+psycopg2-binary = "^2.9.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
