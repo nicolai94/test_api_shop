@@ -36,3 +36,9 @@ class ProductListSerializer(serializers.Serializer):
 
     class Meta:
         fields = ("total_count", "products")
+
+
+class SimpleProductSerializer(ExtendedModelSerializer):
+    class Meta:
+        model = Product
+        fields = ("id", "name", "price")

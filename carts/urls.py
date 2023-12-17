@@ -1,11 +1,17 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
+
+from carts.views.carts import CartViewSet, CartItemViewSet
+
+# from carts.views.carts import cart_detail
+
+router = routers.DefaultRouter()
+
+router.register("carts", CartViewSet)
+router.register("cart_items", CartItemViewSet)
 
 
 urlpatterns = [
-    # path("api/products", all_products, name="products"),
-    # path("api/product/<int:pk>", product_detail, name="product"),
-    # path("api/categories", all_categories, name="categories"),
-    # path("api/category/<int:pk>", category_detail, name="category"),
-    # path("api/product/filters", get_filters, name="product_filters"),
-    # path("api/product/rating", product_rating, name="update_rating"),
+    path("", include(router.urls)),
+    # path("api/cart", cart_detail, name="cart"),
 ]
