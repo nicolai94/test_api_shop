@@ -14,6 +14,6 @@ def resolve_query_params(
     if price_max:
         queryset = queryset.filter(price__lte=price_max)
     if category:
-        queryset = queryset.filter(category__slug=category)
+        queryset = queryset.filter(category__name=category)
 
     return queryset

@@ -4,7 +4,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from products.exceptions import ProductDoesNotExistException
-from products.models import Product
+from products.models import Product, Category
 from products.repositories.products import ProductRepository
 from products.serializers.api.products import ProductRetrieveSerializer, ProductListSerializer
 from products.services.products import resolve_query_params
@@ -31,11 +31,17 @@ def product_detail(request: Request, pk: int) -> Response:
     parameters=[
         OpenApiParameter(name="price_min", type=int, description="Активен", required=False),
         OpenApiParameter(name="price_max", type=int, description="Активен", required=False),
-        OpenApiParameter(name="category", type=str, description="Категория", required=False),
+        OpenApiParameter(
+            name="category",
+            type=str,
+            description="Категория",
+            required=False,
+            enum=[cat.name for cat in Category.objects.all()],
+        ),
     ],
 )
 @api_view(["POST"])
-def all_products(request: Request, category: str) -> Response:
+def all_products(request: Request) -> Response:
     price_min = request.GET.get("price_min")
     price_max = request.GET.get("price_max")
     category = request.GET.get("category")

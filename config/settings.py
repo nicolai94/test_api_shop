@@ -32,6 +32,9 @@ INSTALLED_APPS += [
     "rest_framework",
     "drf_spectacular",
     "corsheaders",
+    "mptt",
+    'django_mptt_admin',
+
 ]
 
 # apps

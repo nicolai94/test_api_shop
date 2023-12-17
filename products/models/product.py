@@ -1,8 +1,7 @@
 from django.db import models
 
 from common.models.mixins import CreatUpdateTimeMixin
-
-# from products.models.category import Category
+from products.models import Category
 
 
 class Product(CreatUpdateTimeMixin):
@@ -11,7 +10,12 @@ class Product(CreatUpdateTimeMixin):
     description = models.TextField(max_length=1000, verbose_name="Описание")
     price = models.PositiveIntegerField(verbose_name="Цена")
     quantity = models.IntegerField(verbose_name="Количество")
-    # category = models.ForeignKey(Category, related_name="products", on_delete=models.PROTECT)
+    category = models.ManyToManyField(
+        "Category",
+        blank=True,
+        related_name="products",
+        verbose_name="Категории"
+    )
 
     class Meta:
         ordering = ("name",)
