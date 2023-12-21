@@ -1,7 +1,6 @@
 from django.db import models
 
 from common.models.mixins import CreatUpdateTimeMixin
-from products.models import Category
 
 
 class Product(CreatUpdateTimeMixin):

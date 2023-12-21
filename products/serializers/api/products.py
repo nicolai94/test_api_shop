@@ -12,7 +12,6 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ProductRetrieveSerializer(ExtendedModelSerializer):
-    # category = CategoryRetrieveSerializer()
     images = ProductImageSerializer(many=True, read_only=True)
 
     class Meta:

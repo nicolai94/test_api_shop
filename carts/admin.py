@@ -1,20 +1,21 @@
 from django.contrib import admin
+from django.contrib.admin import TabularInline
+from carts.models import Cart, CartItem
 
-from carts.models.carts import Cart, CartItem
 
-
-class CartItemInline(admin.TabularInline):
+class CartItemInline(TabularInline):
     model = CartItem
-    fields = ("product", "quantity")
+    fields = ("user", "product", "quantity")
     extra = 1
-
-
-@admin.register(CartItem)
-class CartItem(admin.ModelAdmin):
-    list_display = ("cart", "product", "quantity")
 
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ["id", "created_at"]
+    list_display = ["id", "user", "ordered", "total_price"]
     inlines = [CartItemInline]
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ["id", "cart", "user", "product", "quantity"]
+    fields = ("cart", "user", "product", "quantity")

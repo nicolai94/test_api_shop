@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 import environ
 
+from logs_formatters import CustomJsonFormatter
+
 env = environ.Env()
 
 
@@ -31,10 +33,11 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     "rest_framework",
     "drf_spectacular",
+    "django_redis",
     "corsheaders",
     "mptt",
     'django_mptt_admin',
-
+    "pythonjsonlogger",
 ]
 
 # apps
@@ -89,6 +92,16 @@ DATABASES = {
     },
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{os.environ.get('REDIS_HOST')}:{os.environ.get('REDIS_PORT')}/{os.environ.get('REDIS_BROKER_DB')}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -106,9 +119,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru-RU"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -172,4 +185,33 @@ SPECTACULAR_SETTINGS = {
     "SORT_OPERATIONS": False,
     "ENABLE_DJANGO_DEPLOY_CHECK": False,
     "DISABLE_ERRORS_AND_WARNINGS": True,
+}
+############################################
+# LOGGER
+############################################
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "main-format": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "json_formatter": {
+            "()": CustomJsonFormatter,
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json_formatter",
+        },
+    },
+    "loggers": {
+        "main": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
 }

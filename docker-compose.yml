@@ -13,6 +13,7 @@ services:
       - .env
     depends_on:
       - db
+      - redis
     logging:
       driver: "json-file"
       options:
@@ -35,6 +36,17 @@ services:
     volumes:
       - ./data/dump.sql:/docker-entrypoint-initdb.d/dump.sql
       - ./volumes/postgresql/pg-data:/var/lib/postgresql/data
+
+  redis:
+    image: "redis:6.2-alpine"
+    restart: always
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./volumes/redis:/data
+      - ./deploy/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    container_name: ${COMPOSE_PROJECT_NAME}_redis
+    ports:
+      - "6379:6379"
 
 volumes:
   test_shop_backend:
