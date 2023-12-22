@@ -14,8 +14,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("api.urls")),
     path("schema", SpectacularAPIView.as_view(), name="schema"),
-    path("api/login", user_login, name="user_login"),
-    path("api/logout", user_logout, name="user_log")
+    path("api/auth/login", user_login, name="user_login"),
+    path("api/auth/logout", user_logout, name="user_log"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
@@ -24,3 +24,4 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + s
 urlpatterns += products_urls
 urlpatterns += orders_urls
 urlpatterns += carts_urls
+urlpatterns += orders_urls
