@@ -30,3 +30,29 @@ def test_get_cart(client, cart):
     response = client.get("/api/cart")
 
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_delete_cart(client, cart):
+    cart = Cart.objects.all()
+    assert len(cart) == 1
+    response = client.delete("/api/cart/delete")
+
+    result_carts = Cart.objects.all()
+
+    assert response.status_code == 204
+    assert len(result_carts) == 0
+
+
+@pytest.mark.django_db
+def test_update_cart(client, cart):
+    data = {
+        "product": 1,
+        "quantity": 2,
+    }
+    response = client.put("/api/cart/update", json=data)
+
+    cart_item = CartItem.objects.all()
+    assert response.status_code == 200
+    assert cart_item[0].quantity == 2
+

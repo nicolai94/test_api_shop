@@ -83,4 +83,4 @@ def delete_cart(request: Request):
     queryset = CartItem.objects.filter(cart=cart)
     serializer = CartItemSerializer(queryset, many=True)
 
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
