@@ -1,2 +1,19 @@
-# test_api_shop
-test_hriffin
+# Интернет-магазин
+---
+## Запуск
+**Действия:**
+1. Склонировать репозиторий
+2. Ввести команду docker-compose up --build
+4. Дождаться запуска контейнера
+---
+## Документация
+**localhost:8000/docs**
+---
+## Админка
+**localhost:8000/admin**
+---
+## Создание админа
+1. Зайти в контейнер docker-compose exec backend bash
+2. Ввести python manage.py createsuperuser
+3. Ввести данные для админа
+4. В конце подтвердить
