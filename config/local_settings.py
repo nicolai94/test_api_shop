@@ -32,7 +32,6 @@ INSTALLED_APPS = [
 # packages
 INSTALLED_APPS += [
     "rest_framework",
-    "rest_framework.authtoken",
     "drf_spectacular",
     "django_redis",
     "corsheaders",
@@ -84,12 +83,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env.str("POSTGRES_DB", "postgres"),
-        "USER": env.str("POSTGRES_USER", "postgres"),
-        "PASSWORD": env.str("POSTGRES_PASSWORD", "postgres"),
-        "HOST": env.str("POSTGRES_SERVER", "localhost"),
-        "PORT": env.int("POSTGRES_PORT", 5432),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     },
 }
 

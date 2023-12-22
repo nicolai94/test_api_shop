@@ -1,3 +1,5 @@
+import logging
+
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
@@ -9,6 +11,8 @@ from products.repositories.products import ProductRepository
 from products.serializers.api.products import ProductRetrieveSerializer, ProductListSerializer
 from products.services.products import resolve_query_params
 
+logger = logging.getLogger("main")
+
 
 @extend_schema(summary="Деталка товара", tags=["Товары"], responses=ProductRetrieveSerializer)
 @api_view(["GET"])
@@ -16,7 +20,8 @@ def product_detail(request: Request, pk: int) -> Response:
     try:
         product_repo = ProductRepository()
         product = product_repo.get_product_by_id(pk)
-    except Product.DoesNotExist:
+    except Product.DoesNotExist as e:
+        logger.info(f"Product not found: {e}")
         raise ProductDoesNotExistException
 
     serializer = ProductRetrieveSerializer(product)
@@ -51,6 +56,7 @@ def all_products(request: Request) -> Response:
     filtered_queryset = resolve_query_params(queryset, price_min, price_max, category)
 
     if not filtered_queryset:
+        logger.info("Product not found")
         raise ProductDoesNotExistException
 
     serializer = ProductListSerializer(instance={"total_count": len(filtered_queryset), "products": filtered_queryset})

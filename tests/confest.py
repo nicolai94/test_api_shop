@@ -1,42 +1,31 @@
+import uuid
+
 import pytest
+from django.contrib.auth.models import User
+from django.core.cache import cache
 from rest_framework.test import APIClient
 
-from products.models import Product
-
-pytest_plugins = [
-    "tests.fixtures.product",
-]
-
-
-# @pytest.fixture
-# def product():
-#     def product():
-#         p = Product(
-#             name="test",
-#             slug="test",
-#             description="test description",
-#             quantity=12,
-#         )
-#         p.save()
-#
-#     return product
+from config import settings
+from constants import LOGIN_USER
 
 
 @pytest.fixture
-def client():
-    return APIClient()
+def first_user():
+    return User.objects.create(username='first_user', password="12345")
 
 
-# @pytest.fixture
-# def auth_client(user, client):
-#     client.post("api/login", data={"email": user.email, "password": user.password})
-#
-#     return client
+def set_token(client):
+    user = User.objects.first()
+    token = uuid.uuid4().hex
+    cache.set(
+        LOGIN_USER.format(token=token, project_name=settings.PROJECT_NAME),
+        user.pk,
+    )
+    client.cookies.set("access_token", token)
 
 
-# @pytest.fixture(scope='session')
-# def django_db_setup():
-#     settings.DATABASES['default'] = {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
+@pytest.fixture(scope="function")
+def client(first_user):
+    async with APIClient() as client:
+        set_token(client)
+        yield client

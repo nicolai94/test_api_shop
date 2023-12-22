@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -16,4 +16,5 @@ from products.serializers.api.category import CategorySerializer
 def get_category_tree(request: Request):
     categories = Category.objects.filter(parent__isnull=True)
     serializer = CategorySerializer(categories, many=True)
+
     return Response(serializer.data)
